@@ -98,16 +98,17 @@ export const useKeyboard = ({
 
   // 키 다운 핸들러
   const handleKeyDown = useCallback((e) => {
-    const key = e.key
+    // event.code 사용 - 한/영 상관없이 물리적 키 위치 기반
+    const code = e.code
 
     // 이미 눌린 키는 무시 (키 반복 방지)
-    if (keysPressed.current.has(key)) {
+    if (keysPressed.current.has(code)) {
       return
     }
-    keysPressed.current.add(key)
+    keysPressed.current.add(code)
 
     // 일시정지/재개 토글
-    if (isKeyFor(key, 'pause')) {
+    if (isKeyFor(code, 'pause')) {
       e.preventDefault()
       if (gameStatus === 'playing') {
         onPause()
@@ -125,36 +126,36 @@ export const useKeyboard = ({
     e.preventDefault()
 
     // 이동 (DAS/ARR 적용)
-    if (isKeyFor(key, 'moveLeft')) {
+    if (isKeyFor(code, 'moveLeft')) {
       clearDasArr('right') // 반대 방향 취소
       startDas('left')
       return
     }
 
-    if (isKeyFor(key, 'moveRight')) {
+    if (isKeyFor(code, 'moveRight')) {
       clearDasArr('left') // 반대 방향 취소
       startDas('right')
       return
     }
 
     // 회전
-    if (isKeyFor(key, 'rotateClockwise')) {
+    if (isKeyFor(code, 'rotateClockwise')) {
       onRotateRight()
       return
     }
 
-    if (isKeyFor(key, 'rotateCounterClockwise')) {
+    if (isKeyFor(code, 'rotateCounterClockwise')) {
       onRotateLeft()
       return
     }
 
-    if (isKeyFor(key, 'rotate180')) {
+    if (isKeyFor(code, 'rotate180')) {
       onRotate180()
       return
     }
 
     // Soft Drop
-    if (isKeyFor(key, 'softDrop')) {
+    if (isKeyFor(code, 'softDrop')) {
       callbacksRef.current.onSoftDrop()
       // 반복 Soft Drop (ref 사용으로 항상 최신 콜백 참조)
       softDropInterval.current = setInterval(() => {
@@ -164,13 +165,13 @@ export const useKeyboard = ({
     }
 
     // Hard Drop
-    if (isKeyFor(key, 'hardDrop')) {
+    if (isKeyFor(code, 'hardDrop')) {
       onHardDrop()
       return
     }
 
     // Hold
-    if (isKeyFor(key, 'hold')) {
+    if (isKeyFor(code, 'hold')) {
       onHold()
       return
     }
@@ -191,22 +192,22 @@ export const useKeyboard = ({
 
   // 키 업 핸들러
   const handleKeyUp = useCallback((e) => {
-    const key = e.key
-    keysPressed.current.delete(key)
+    const code = e.code
+    keysPressed.current.delete(code)
 
     // 이동 키 해제
-    if (isKeyFor(key, 'moveLeft')) {
+    if (isKeyFor(code, 'moveLeft')) {
       clearDasArr('left')
       return
     }
 
-    if (isKeyFor(key, 'moveRight')) {
+    if (isKeyFor(code, 'moveRight')) {
       clearDasArr('right')
       return
     }
 
     // Soft Drop 해제
-    if (isKeyFor(key, 'softDrop')) {
+    if (isKeyFor(code, 'softDrop')) {
       clearSoftDrop()
       return
     }

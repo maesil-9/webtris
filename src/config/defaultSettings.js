@@ -43,9 +43,9 @@ export const defaultSettings = {
   
   // 조작 설정
   controls: {
-    das: 170,                   // Delayed Auto Shift (ms)
-    arr: 50,                    // Auto Repeat Rate (ms)
-    softDropSpeed: 50,          // Soft Drop 속도 (ms)
+    das: 100,                   // Delayed Auto Shift (ms) - 키 누르고 반복 시작까지 대기
+    arr: 16,                    // Auto Repeat Rate (ms) - 반복 이동 간격 (낮을수록 빠름)
+    softDropSpeed: 33,          // Soft Drop 속도 (ms)
   },
   
   // 레벨 설정
@@ -76,17 +76,17 @@ export const defaultSettings = {
     enabled: true               // 사운드 활성화
   },
 
-  // 키 매핑 설정
+  // 키 매핑 설정 (event.code 기반 - 한/영 상관없이 동작)
   keyBindings: {
     moveLeft: ['ArrowLeft'],
     moveRight: ['ArrowRight'],
     softDrop: ['ArrowDown'],
-    hardDrop: ['Space', ' '],
-    rotateClockwise: ['ArrowUp', 'x', 'X'],
-    rotateCounterClockwise: ['z', 'Z', 'Control'],
-    rotate180: ['a', 'A'],
-    hold: ['c', 'C'],
-    pause: ['Escape', 'p', 'P'],
+    hardDrop: ['Space'],
+    rotateClockwise: ['ArrowUp', 'KeyX'],
+    rotateCounterClockwise: ['KeyZ', 'ControlLeft', 'ControlRight'],
+    rotate180: ['KeyA'],
+    hold: ['KeyC'],
+    pause: ['Escape', 'KeyP'],
   }
 }
 
