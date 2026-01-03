@@ -80,21 +80,29 @@ export const useKeyboard = ({
 
   // DAS 시작 (좌우 이동용)
   const startDas = useCallback((direction) => {
-    const getMoveFunc = () => direction === 'left' 
-      ? callbacksRef.current.onMoveLeft 
-      : callbacksRef.current.onMoveRight
+    // 기존 타이머 정리
+    clearDasArr(direction)
     
     // 즉시 한 번 이동
-    getMoveFunc()()
+    if (direction === 'left') {
+      callbacksRef.current.onMoveLeft()
+    } else {
+      callbacksRef.current.onMoveRight()
+    }
 
-    // DAS 타이머 시작
+    // DAS 타이머 시작 (처음 누르고 반복 시작까지 대기)
     dasTimers.current[direction] = setTimeout(() => {
-      // ARR 시작 (반복 이동, ref 사용으로 항상 최신 콜백 참조)
+      // ARR 시작 (반복 이동)
       arrIntervals.current[direction] = setInterval(() => {
-        getMoveFunc()()
+        // 직접 ref 참조로 항상 최신 콜백 사용
+        if (direction === 'left') {
+          callbacksRef.current.onMoveLeft()
+        } else {
+          callbacksRef.current.onMoveRight()
+        }
       }, controls.arr)
     }, controls.das)
-  }, [controls.das, controls.arr])
+  }, [controls.das, controls.arr, clearDasArr])
 
   // 키 다운 핸들러
   const handleKeyDown = useCallback((e) => {
